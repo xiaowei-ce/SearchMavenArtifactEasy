@@ -1,11 +1,11 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>cc.xiaowei.SearchMavenArtifactInIDEA</id>
+    <id>cc.xiaowei.SearchMavenArtifactEasy</id>
 
     <!-- Public plugin name should be written in Title Case.
      Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
-    <name>SearchMavenArtifactInIDEA</name>
+    <name>SearchMavenArtifactEasy</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor url="https://github.com/xiaowei">xiaowei</vendor>
@@ -13,7 +13,7 @@
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-content.html#plugin-description -->
     <description><![CDATA[
-        <h3>SearchMavenArtifactInIDEA</h3>
+        <h3>SearchMavenArtifactEasy</h3>
         <p>Search Maven Central dependencies and add them directly to pom.xml.</p>
         <ul>
             <li><strong>Search:</strong> Search Maven artifacts by keyword</li>
@@ -30,7 +30,7 @@
 
     <actions>
         <action id="MavenSearchAction" class="cc.xiaowei.MavenSearchAction"
-                text="Search Maven Artifact in IDEA"
+                text="Search Maven Artifact Easy"
                 description="Search and add Maven dependencies from Maven Central">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>

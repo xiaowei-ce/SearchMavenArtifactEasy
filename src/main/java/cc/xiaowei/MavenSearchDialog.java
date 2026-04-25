@@ -35,7 +35,7 @@ public class MavenSearchDialog extends DialogWrapper {
 
     private static final Logger LOG = Logger.getInstance(MavenSearchDialog.class);
 
-    static final String DIALOG_TITLE = "Search Maven Artifact in IDEA";
+    static final String DIALOG_TITLE = "Search Maven Artifact Easy";
     static final String NO_VERSION_ITEM = "[No Version / Omit]";
     static final String EMPTY_TEXT_NO_RESULTS = "No artifacts found";
     static final String LOADING_TEXT = "Loading...";
@@ -238,7 +238,7 @@ public class MavenSearchDialog extends DialogWrapper {
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(new StringSelection(text), null);
                 Notifications.Bus.notify(
-                        new Notification("SearchMavenArtifactInIDEA", "Copied to clipboard",
+                        new Notification("SearchMavenArtifactEasy", "Copied to clipboard",
                                 NotificationType.INFORMATION), project);
             }
         });
@@ -455,7 +455,7 @@ public class MavenSearchDialog extends DialogWrapper {
             PomXmlManager.addDependency(project, pomFile, groupId, artifactId,
                     hasVersion ? version : null);
             Notifications.Bus.notify(
-                    new Notification("SearchMavenArtifactInIDEA", "Dependency added to pom.xml successfully!",
+                    new Notification("SearchMavenArtifactEasy", "Dependency added to pom.xml successfully!",
                             NotificationType.INFORMATION), project);
         } catch (Exception ex) {
             Messages.showErrorDialog("Failed to add dependency: " + ex.getMessage(), "Error");

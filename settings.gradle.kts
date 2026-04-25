@@ -1,1 +1,1 @@
-rootProject.name = "SearchMavenArtifactInIDEA"
+rootProject.name = "SearchMavenArtifactEasy"
