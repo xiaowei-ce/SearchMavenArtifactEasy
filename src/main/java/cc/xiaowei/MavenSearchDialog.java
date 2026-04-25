@@ -4,6 +4,9 @@ import cc.xiaowei.service.MavenSearchService;
 import cc.xiaowei.service.MavenSearchService.ArtifactEntry;
 import cc.xiaowei.utils.StringUtils;
 import cc.xiaowei.service.PomXmlManager;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
@@ -32,7 +35,7 @@ public class MavenSearchDialog extends DialogWrapper {
 
     private static final Logger LOG = Logger.getInstance(MavenSearchDialog.class);
 
-    static final String DIALOG_TITLE = "Maven Artifact Search";
+    static final String DIALOG_TITLE = "Search Maven Artifact in IDEA";
     static final String NO_VERSION_ITEM = "[No Version / Omit]";
     static final String EMPTY_TEXT_NO_RESULTS = "No artifacts found";
     static final String LOADING_TEXT = "Loading...";
@@ -53,6 +56,7 @@ public class MavenSearchDialog extends DialogWrapper {
     private String selectedGroupId;
     private String selectedArtifactId;
     private boolean isSearching = false;
+    private boolean hasPomFile = false;
 
     // Pagination state
     private int currentPage = 0;
@@ -76,12 +80,12 @@ public class MavenSearchDialog extends DialogWrapper {
     }
 
     private void checkPomFileStatus() {
-        addToPomBtn.setEnabled(false);
+        hasPomFile = false;
         if (project == null) return;
         FileEditorManager fem = FileEditorManager.getInstance(project);
         VirtualFile[] selectedFiles = fem.getSelectedFiles();
         if (selectedFiles.length > 0 && "pom.xml".equals(selectedFiles[0].getName())) {
-            addToPomBtn.setEnabled(true);
+            hasPomFile = true;
             LOG.info("pom.xml detected in active editor, Add to pom.xml enabled");
         } else {
             LOG.info("No pom.xml in active editor (file="
@@ -180,6 +184,7 @@ public class MavenSearchDialog extends DialogWrapper {
         copyBtn = new JButton("Copy XML");
         copyBtn.setEnabled(false);
         addToPomBtn = new JButton("Add to pom.xml");
+        addToPomBtn.setEnabled(false);
         actionPanel.add(copyBtn);
         actionPanel.add(addToPomBtn);
         southPanel.add(actionPanel);
@@ -232,6 +237,9 @@ public class MavenSearchDialog extends DialogWrapper {
             if (text != null && !text.isEmpty()) {
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 clipboard.setContents(new StringSelection(text), null);
+                Notifications.Bus.notify(
+                        new Notification("SearchMavenArtifactInIDEA", "Copied to clipboard",
+                                NotificationType.INFORMATION), project);
             }
         });
 
@@ -405,18 +413,20 @@ public class MavenSearchDialog extends DialogWrapper {
         if (selectedGroupId == null || selectedArtifactId == null) {
             xmlPreview.setText("");
             copyBtn.setEnabled(false);
+            addToPomBtn.setEnabled(false);
             return;
         }
 
         String groupId = selectedGroupId;
         String artifactId = selectedArtifactId;
         String version = (String) versionCombo.getSelectedItem();
-        boolean hasVersion = version != null && !NO_VERSION_ITEM.equals(version);
+        boolean hasVersion = version != null && !NO_VERSION_ITEM.equals(version) && !LOADING_TEXT.equals(version);
 
         String depXml = StringUtils.buildDependencyXml(groupId, artifactId, hasVersion ? version : null, "    ");
         xmlPreview.setText(depXml);
         xmlPreview.setCaretPosition(0);
         copyBtn.setEnabled(true);
+        addToPomBtn.setEnabled(hasPomFile);
     }
 
     // ========================================================================
@@ -439,13 +449,14 @@ public class MavenSearchDialog extends DialogWrapper {
         String groupId = selectedGroupId;
         String artifactId = selectedArtifactId;
         String version = (String) versionCombo.getSelectedItem();
-        boolean hasVersion = version != null && !NO_VERSION_ITEM.equals(version);
+        boolean hasVersion = version != null && !NO_VERSION_ITEM.equals(version) && !LOADING_TEXT.equals(version);
 
         try {
             PomXmlManager.addDependency(project, pomFile, groupId, artifactId,
                     hasVersion ? version : null);
-            Messages.showInfoMessage("Dependency added to pom.xml successfully!",
-                    "Add to pom.xml");
+            Notifications.Bus.notify(
+                    new Notification("SearchMavenArtifactInIDEA", "Dependency added to pom.xml successfully!",
+                            NotificationType.INFORMATION), project);
         } catch (Exception ex) {
             Messages.showErrorDialog("Failed to add dependency: " + ex.getMessage(), "Error");
         }
@@ -460,6 +471,7 @@ public class MavenSearchDialog extends DialogWrapper {
         versionCombo.setEnabled(false);
         xmlPreview.setText("");
         copyBtn.setEnabled(false);
+        addToPomBtn.setEnabled(false);
         selectedGroupId = null;
         selectedArtifactId = null;
     }

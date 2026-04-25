@@ -1,6 +1,6 @@
-# Maven Artifact Search
+# SearchMavenArtifactInIDEA
 
-[![Plugin Version](https://img.shields.io/badge/version-0.1--beta-blue.svg)](https://github.com/xiaowei/MavenArtifactSearch)
+[![Plugin Version](https://img.shields.io/badge/version-0.1--beta-blue.svg)](https://github.com/xiaowei/SearchMavenArtifactInIDEA)
 [![IntelliJ Platform](https://img.shields.io/badge/IntelliJ_IDEA-2025.3%2B-000000.svg)](https://www.jetbrains.com/idea/)
 [![Build](https://img.shields.io/badge/build-Gradle-006600.svg)](https://gradle.org/)
 
@@ -25,7 +25,7 @@ An IntelliJ IDEA plugin that searches Maven Central artifacts directly within th
 
 1. Open **Settings/Preferences -> Plugins**
 2. Click the gear icon -> **Install Plugin from Disk...**
-3. Select the built plugin package (`build/libs/Maven Artifact Searcher-0.1-beta.jar`)
+3. Select the built plugin package (`build/libs/SearchMavenArtifactInIDEA-0.1-beta.jar`)
 4. Restart the IDE
 
 Or build from source:
@@ -37,7 +37,7 @@ Or build from source:
 ### Usage
 
 1. Open any Maven project (containing a `pom.xml`)
-2. Click **Tools -> Maven Artifact Search** (or search for `Maven Artifact Search` via Find Action)
+2. Click **Tools -> Search Maven Artifact in IDEA** (or search for `Search Maven Artifact in IDEA` via Find Action)
 3. Enter a keyword (e.g. `lombok`, `gson`) in the search field and click **Search**
 4. Select an artifact from the results table
 5. Choose a version from the dropdown (or select `[No Version / Omit]` to leave the version tag out)
