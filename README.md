@@ -75,42 +75,6 @@ src/main/java/cc/xiaowei/
 
 ---
 
-## Build
-
-```bash
-# Build the plugin
-./gradlew buildPlugin
-
-# Run the sandbox IDE
-./gradlew runIde
-
-# Run tests
-./gradlew test
-```
-
-The built plugin artifact is located in `build/libs/`.
-
----
-
-## API Reference
-
-The plugin uses two public APIs:
-
-### 1. Sonatype Central Search API
-
-- **Endpoint**: `POST https://central.sonatype.com/api/internal/browse/components`
-- **Purpose**: Search Maven artifacts
-- **Request body**: `{ "page": 0, "size": 20, "searchTerm": "...", "filter": [] }`
-- **Details**: See [API documentation](%E6%96%87%E6%A1%A3/%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3.md)
-
-### 2. Maven Solr Version API
-
-- **Endpoint**: `GET https://search.maven.org/solrsearch/select`
-- **Purpose**: Query all versions of a specific artifact
-- **Parameters**: `q=g:"groupId" AND a:"artifactId"&core=gav&rows=100&wt=json`
-
----
-
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
