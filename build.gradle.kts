@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "cc.xiaowei"
-version = "0.1-beta"
+version = "1.0"
 
 // Set the JVM language level used to build the project.
 kotlin {

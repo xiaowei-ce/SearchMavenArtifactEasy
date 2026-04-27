@@ -9,24 +9,27 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class FetchUtils {
 
     public static final String SEARCH_API_URL = "https://central.sonatype.com/api/internal/browse/components";
     public static final String VERSION_API_URL = "https://search.maven.org/solrsearch/select";
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0";
-    private static final Duration TIMEOUT = Duration.ofSeconds(30);
+    private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(15);
+    private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(20);
 
-    private static final ExecutorService HTTP_EXECUTOR = Executors.newFixedThreadPool(2, r -> {
+    private static final ExecutorService HTTP_EXECUTOR = Executors.newFixedThreadPool(4, r -> {
         Thread t = new Thread(r, "maven-search-http");
         t.setDaemon(true);
         return t;
     });
 
     public static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
-            .connectTimeout(TIMEOUT)
+            .connectTimeout(CONNECT_TIMEOUT)
             .executor(HTTP_EXECUTOR)
             .followRedirects(HttpClient.Redirect.NORMAL)
             .build();
@@ -41,7 +44,7 @@ public class FetchUtils {
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .header("User-Agent", USER_AGENT)
-                .timeout(TIMEOUT)
+                .timeout(REQUEST_TIMEOUT)
                 .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                 .build();
     }
@@ -50,13 +53,20 @@ public class FetchUtils {
         return HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("User-Agent", USER_AGENT)
-                .timeout(TIMEOUT)
+                .timeout(REQUEST_TIMEOUT)
                 .GET()
                 .build();
     }
 
     public static HttpResponse<String> execute(HttpRequest request) throws Exception {
-        return HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        CompletableFuture<HttpResponse<String>> future = HTTP_CLIENT
+                .sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        try {
+            return future.get(REQUEST_TIMEOUT.getSeconds(), TimeUnit.SECONDS);
+        } catch (java.util.concurrent.TimeoutException e) {
+            future.cancel(true);
+            throw new java.net.http.HttpTimeoutException("Request timed out after " + REQUEST_TIMEOUT.getSeconds() + "s");
+        }
     }
 
     // ========================================================================

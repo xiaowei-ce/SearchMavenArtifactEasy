@@ -26,13 +26,14 @@
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-    <version>0.1-beta</version>
+    <version>1.0</version>
 
     <actions>
         <action id="MavenSearchAction" class="cc.xiaowei.MavenSearchAction"
                 text="Search Maven Artifact Easy"
                 description="Search and add Maven dependencies from Maven Central">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>

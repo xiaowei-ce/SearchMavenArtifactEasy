@@ -100,16 +100,24 @@ public class MavenSearchService {
 
             @Override
             public void onSuccess() {
-                if (errorMessage != null) {
-                    onError.accept(errorMessage);
-                    return;
+                try {
+                    if (errorMessage != null) {
+                        onError.accept(errorMessage);
+                        return;
+                    }
+                    onSuccess.accept(new SearchResult(results, respPageCount, respTotalCount));
+                } catch (Exception ex) {
+                    LOG.error("Error in search onSuccess callback", ex);
                 }
-                onSuccess.accept(new SearchResult(results, respPageCount, respTotalCount));
             }
 
             @Override
             public void onFinished() {
-                if (onFinished != null) onFinished.run();
+                try {
+                    if (onFinished != null) onFinished.run();
+                } catch (Exception ex) {
+                    LOG.error("Error in search onFinished callback", ex);
+                }
             }
         };
         task.queue();
@@ -183,16 +191,24 @@ public class MavenSearchService {
 
             @Override
             public void onSuccess() {
-                if (errorMessage != null) {
-                    onError.accept(errorMessage);
-                    return;
+                try {
+                    if (errorMessage != null) {
+                        onError.accept(errorMessage);
+                        return;
+                    }
+                    onSuccess.accept(versions);
+                } catch (Exception ex) {
+                    LOG.error("Error in fetchVersions onSuccess callback", ex);
                 }
-                onSuccess.accept(versions);
             }
 
             @Override
             public void onFinished() {
-                if (onFinished != null) onFinished.run();
+                try {
+                    if (onFinished != null) onFinished.run();
+                } catch (Exception ex) {
+                    LOG.error("Error in fetchVersions onFinished callback", ex);
+                }
             }
         };
         task.queue();
