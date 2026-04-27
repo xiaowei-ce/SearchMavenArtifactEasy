@@ -1,6 +1,7 @@
 # SearchMavenArtifactEasy
 
-[![Plugin Version](https://img.shields.io/badge/version-0.1--beta-blue.svg)](https://github.com/xiaowei/SearchMavenArtifactEasy)
+[![Plugin Version](https://img.shields.io/badge/version-0.1--beta-blue.svg)](https://plugins.jetbrains.com/plugin/31454-searchmavenartifacteasy)
+[![JetBrains Marketplace](https://img.shields.io/jetbrains/plugin/v/31454?label=Marketplace&color=green)](https://plugins.jetbrains.com/plugin/31454-searchmavenartifacteasy)
 [![IntelliJ Platform](https://img.shields.io/badge/IntelliJ_IDEA-2025.3%2B-000000.svg)](https://www.jetbrains.com/idea/)
 [![Build](https://img.shields.io/badge/build-Gradle-006600.svg)](https://gradle.org/)
 
@@ -23,16 +24,31 @@ An IntelliJ IDEA plugin that searches Maven Central artifacts directly within th
 
 ### Installation
 
-1. Open **Settings/Preferences -> Plugins**
-2. Click the gear icon -> **Install Plugin from Disk...**
-3. Select the built plugin package (`build/libs/SearchMavenArtifactEasy-0.1-beta.jar`)
-4. Restart the IDE
+#### From JetBrains Marketplace (Recommended)
 
-Or build from source:
+1. Open **Settings/Preferences -> Plugins**
+2. Click **Marketplace** tab
+3. Search for `SearchMavenArtifactEasy`
+4. Click **Install**
+5. Restart the IDE
+
+Or directly install from the plugin page: [SearchMavenArtifactEasy on JetBrains Marketplace](https://plugins.jetbrains.com/plugin/31454-searchmavenartifacteasy)
+
+#### From Disk
+
+1. Download the plugin ZIP from [Releases](https://github.com/xiaowei-ce/SearchMavenArtifactEasy/releases)
+2. Open **Settings/Preferences -> Plugins**
+3. Click the gear icon -> **Install Plugin from Disk...**
+4. Select the downloaded ZIP file
+5. Restart the IDE
+
+#### Build from Source
 
 ```bash
 ./gradlew buildPlugin
 ```
+
+The built plugin package will be at `build/libs/SearchMavenArtifactEasy-*.jar`.
 
 ### Usage
 
